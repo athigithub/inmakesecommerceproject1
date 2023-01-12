@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.description|truncatewords:155 }}
+    {% else %}
+        WELCOME TO EMART HERE YOU CAN BUY DIFFERENT THINGS...
+    {% endif %}
+{% endblock %}
+{% block title %}
+  {% if category %}
+
+        {{category.name }} - EMART
+    {% else %}s
+        SEE OUR NEW ARRIVALS - EMART
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<!--<div>-->
+<!--    <img src="{% static 'img/GroceryBanner13.jpg' %}" alt="our products" width="1500" height="300px">-->
+<!--</div>-->
+    {% if category %}
+        <div>
+            <div class="row my_row_class" >
+                <div class="mx-auto">
+                    <p><a href="{% url 'ecommerceapp:allProdCat' %}"></a></p>
+                </div>
+            </div>
+        </div>
+<div class="mx-auto">
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    {% if category %}
+    <img  src="{{category.image.url}}" alt="{{category.name}}" width="500px" height="300" align="center">
+    {% endif %}
+
+
+
+</div>
+ <br>
+<div>
+
+    <p class="text-justify"><h4>{{category.description}}</h4></p>
+</div>
+    {% else %}
+<div >
+<img class="my_image my_image_padding" src="{% static 'img/GroceryBanner13.jpg' %}" alt="our products" >
+</div>
+    <div>
+    <h1 class="text-center my_title">Our product collection</h1>
+    <p class="text-justify">A supermarket is a self-service shop offering a wide variety of food, beverages and household products, organized into sections. This kind of store is larger and has a wider selection than earlier grocery stores, but is smaller and more limited in the range of merchandise than a hypermarket or big-box market</p>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row mx_auto">
+        {% for product in products.object_list %}
+        <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-lg-4">
+            <div class="card text-center" style="min-width:18rem;">
+                <a href="{{product.get_url}}" ><img  src="{{product.image.url}}" alt="{{product.name}}" width="200" height="200"></a>
+            <div class="card-body">
+
+                <h2>{{product.name}}</h2>
+                <p>₹{{product.price}}</p>
+                <p>{{product.category}}</p>
+                <a href="#" class="btn btn-warning">Buy Now</a>
+            </div>
+            </div>
+        </div>
+         {% endfor %}
+    </div>
+    <div class="mx-auto">
+        {% if products.paginator.num_pages > 1 %}<hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+
+{% endblock %}
+
+

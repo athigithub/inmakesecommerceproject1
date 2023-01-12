@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+
+ This is the cart page.Proceed to see your items and place the order
+{% endblock %}
+
+{% block title %}
+Cart -EMART PVT LTD
+{% endblock %}
+{% block content %}
+{% if not cart_items %}
+<div>
+  <div class="text-center"><br>
+    <h1 class="text-center my_title">
+      Your Cart is Empty
+    </h1><br>
+    <p class="=text-center">
+       Click  <a href="{% url 'ecommerceapp:allProdCat' %}">Here</a> to continue shopping.
+
+    </p>
+  </div>
+
+</div>
+{% else %}
+
+<div>
+  <div class="text-center"><br>
+    <h1 class="text-center my_title">
+      My Cart
+    </h1><br>
+  </div>
+</div>
+<div class="row mx-auto">
+  <div class="col-12 col-md-12 col-sm col-lg-6 text-center" >
+    <table class="table my_custom_table">
+      <thead class="my_custom_thead">
+      <tr>
+        <th colspan="5">
+            My items
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for cart_item in cart_items %}
+      <tr>
+        <td>
+          <a href="cart_item.product.get_absolute_url"><img src="{{cart_item.product.image.url}}" class="float-left rounded_custom_image" width="150px" height="150px"> </a>
+        </td>
+
+        <td class="text-left body">
+          <b>{{cart_item.product.name}}</b><br><br>
+          SKU: {{cart_item.product.id}}<br>
+          Price : ₹ {{cart_item.product.price}}<br>
+          Quantity : {{cart_item.quantity}} x ₹ {{cart_item}}
+        </td>
+        <td>
+          <b>Total : ₹{{cart_item.sub_total}}</b>
+        </td>
+        {% if cart_item.quantity < cart_item.product.stock %}
+          <td>
+            <a href="{% url 'cart:add_cart' cart_item.product.id %}" class="custom_a">
+              <i class="fa fa-plus custom_icon"></i></a>
+             &nbsp;<a href="{% url 'cart:cart_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-minus custom_icon"></i></a>
+             &nbsp;<a href="{% url 'cart:full_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-trash custom_icon"></i></a>
+          </td>
+        {% else %}
+           <td>
+              &nbsp;<a href="{% url 'cart:cart_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-minus custom_icon"></i></a>
+              &nbsp;<a href="{% url 'cart:full_remove' cart_item.product.id %}" class="custom_a"><i class="fa fa-trash custom_icon"></i></a>
+          </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+  </div>
+  <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+    <table class="table custom_table">
+      <thead class="my_custom_thead">
+        <tr>
+          <th>
+            Checkout
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="body">
+            Please review your cart items before proceeding with payment
+          </td>
+        </tr>
+       <tr>
+         <td class="text-left">
+          <b>Your Total Amount :<strong>₹{{ total }}</strong> </b>
+         </td>
+       </tr>
+      </tbody>
+    </table>
+    <div class="mx-auto">
+      <a href="{% url 'ecommerceapp:allProdCat' %}" class="btn btn-warning btn-block my_custom_button">Continue Shopping</a> <br><br>
+
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
